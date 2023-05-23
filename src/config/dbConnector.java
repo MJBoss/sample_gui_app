@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
 public class dbConnector {
     
     
-        private Connection connect;
+        public Connection connect;
             
        // constructor to connect to our database
         public dbConnector(){

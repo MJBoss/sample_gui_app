@@ -19,6 +19,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.DriverManager;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -39,6 +43,88 @@ public class studentForm extends javax.swing.JFrame {
      */
     public studentForm() {
         initComponents();
+        browse.setVisible(false);
+    }
+    
+    public String destination = "";
+    File selectedFile;
+    public String oldpath;
+    String path;
+    
+    public void imageUpdater(String existingFilePath, String newFilePath){
+        File existingFile = new File(existingFilePath);
+        if (existingFile.exists()) {
+            String parentDirectory = existingFile.getParent();
+            File newFile = new File(newFilePath);
+            String newFileName = newFile.getName();
+            File updatedFile = new File(parentDirectory, newFileName);
+            existingFile.delete();
+            try {
+                Files.copy(newFile.toPath(), updatedFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                System.out.println("Image updated successfully.");
+            } catch (IOException e) {
+                System.out.println("Error occurred while updating the image: ");
+            }
+        } else {
+            try{
+                Files.copy(selectedFile.toPath(), new File(destination).toPath(), StandardCopyOption.REPLACE_EXISTING);
+            }catch(IOException e){
+                System.out.println("Error on update!");
+            }
+        }
+   }
+    
+        public static int getHeightFromWidth(String imagePath, int desiredWidth) {
+        try {
+            // Read the image file
+            File imageFile = new File(imagePath);
+            BufferedImage image = ImageIO.read(imageFile);
+            
+            // Get the original width and height of the image
+            int originalWidth = image.getWidth();
+            int originalHeight = image.getHeight();
+            
+            // Calculate the new height based on the desired width and the aspect ratio
+            int newHeight = (int) ((double) desiredWidth / originalWidth * originalHeight);
+            
+            return newHeight;
+        } catch (IOException ex) {
+            System.out.println("No image found!");
+        }
+        
+        return -1;
+    }
+    
+    
+public  ImageIcon ResizeImage(String ImagePath, byte[] pic, JLabel label) {
+    ImageIcon MyImage = null;
+        if(ImagePath !=null){
+            MyImage = new ImageIcon(ImagePath);
+        }else{
+            MyImage = new ImageIcon(pic);
+        }
+        
+    int newHeight = getHeightFromWidth(ImagePath, label.getWidth());
+
+    Image img = MyImage.getImage();
+    Image newImg = img.getScaledInstance(label.getWidth(), newHeight, Image.SCALE_SMOOTH);
+    ImageIcon image = new ImageIcon(newImg);
+    return image;
+}
+
+public int FileExistenceChecker(String path){
+        File file = new File(path);
+        String fileName = file.getName();
+        
+        Path filePath = Paths.get("src/images", fileName);
+        boolean fileExists = Files.exists(filePath);
+        
+        if (fileExists) {
+            return 1;
+        } else {
+            return 0;
+        }
+    
     }
     
     public void close(){
@@ -87,14 +173,14 @@ public class studentForm extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         st_address = new javax.swing.JTextArea();
         jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
         st_id = new javax.swing.JTextField();
         st_contact = new javax.swing.JTextField();
-        select_image = new javax.swing.JPanel();
-        st_label1 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        image_display = new javax.swing.JLabel();
+        image = new javax.swing.JLabel();
+        image1 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        browse = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -121,9 +207,9 @@ public class studentForm extends javax.swing.JFrame {
             }
         });
         jPanel2.add(close);
-        close.setBounds(710, 10, 40, 40);
+        close.setBounds(630, 10, 40, 40);
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 760, 60));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 680, 60));
 
         add.setBackground(new java.awt.Color(140, 104, 141));
         add.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -143,15 +229,15 @@ public class studentForm extends javax.swing.JFrame {
         st_label.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         st_label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         st_label.setText("Label");
-        add.add(st_label, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 100, 20));
+        add.add(st_label, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, 150, 20));
 
-        jPanel1.add(add, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 430, 100, 40));
+        jPanel1.add(add, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 410, 210, 40));
 
         st_email.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         st_email.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         st_email.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         st_email.setOpaque(false);
-        jPanel1.add(st_email, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 390, 240, 30));
+        jPanel1.add(st_email, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 130, 210, 30));
 
         jLabel6.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jLabel6.setText("Student ID:");
@@ -209,21 +295,17 @@ public class studentForm extends javax.swing.JFrame {
 
         jLabel11.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jLabel11.setText("Email:");
-        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 390, 100, 30));
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 130, 70, 30));
 
         st_address.setColumns(20);
         st_address.setRows(5);
         jScrollPane1.setViewportView(st_address);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 340, 210, 130));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 340, 210, 110));
 
         jLabel12.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jLabel12.setText("Address:");
         jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(53, 340, 90, 30));
-
-        jLabel13.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        jLabel13.setText("Image:");
-        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 90, 100, 30));
 
         st_id.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         st_id.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -236,63 +318,58 @@ public class studentForm extends javax.swing.JFrame {
         st_contact.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         st_contact.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         st_contact.setOpaque(false);
-        jPanel1.add(st_contact, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 350, 240, 30));
-
-        select_image.setBackground(new java.awt.Color(140, 104, 141));
-        select_image.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        select_image.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                select_imageMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                select_imageMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                select_imageMouseExited(evt);
-            }
-        });
-        select_image.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        st_label1.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        st_label1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        st_label1.setText("Label");
-        select_image.add(st_label1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 240, 20));
-
-        jPanel1.add(select_image, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 300, 240, 40));
+        jPanel1.add(st_contact, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 90, 210, 30));
 
         jLabel14.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jLabel14.setText("Contact:");
-        jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 350, 100, 30));
+        jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 90, 70, 30));
 
-        jPanel3.setBackground(new java.awt.Color(153, 153, 255));
+        jPanel3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel3MouseClicked(evt);
+            }
+        });
+        jPanel3.setLayout(null);
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(30, Short.MAX_VALUE)
-                .addComponent(image_display, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(image_display, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+        image.setBackground(new java.awt.Color(153, 153, 255));
+        image.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        image.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jPanel3.add(image);
+        image.setBounds(10, 10, 190, 160);
 
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 90, 240, 200));
+        image1.setBackground(new java.awt.Color(153, 153, 255));
+        image1.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        image1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        image1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconsFolder/add.png"))); // NOI18N
+        jPanel3.add(image1);
+        image1.setBounds(10, 10, 190, 160);
+
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 190, 210, 180));
+
+        jLabel13.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        jLabel13.setText("Image:");
+        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 190, 70, 30));
+
+        browse.setBackground(new java.awt.Color(153, 153, 255));
+        browse.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        browse.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        browse.setText("BROWSE");
+        browse.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                browseMouseClicked(evt);
+            }
+        });
+        jPanel1.add(browse, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 380, 210, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 761, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 496, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 475, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -330,13 +407,13 @@ public class studentForm extends javax.swing.JFrame {
     }//GEN-LAST:event_femaleActionPerformed
 
     private void addMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addMouseClicked
-       if(action.equals("Add")){
+        if(action.equals("Add")){
+           dbConnector dbc = new dbConnector();
+           int result=0;
            try{
-            dbConnector dbc = new dbConnector();
-            Connection con = dbc.connect_db();
+            
             String sql = "INSERT INTO tbl_student (s_fname, s_lname, s_gender, s_address, s_status, s_contact, s_email, s_image) VALUES (?,?,?,?,?,?,?,?)";
-            PreparedStatement pst = con.prepareStatement(sql);
-
+            PreparedStatement pst = dbc.connect.prepareStatement(sql);
             pst.setString(1, st_fname.getText());
             pst.setString(2, st_lname.getText());
             pst.setString(3, gender);
@@ -344,90 +421,88 @@ public class studentForm extends javax.swing.JFrame {
             pst.setString(5, st_status.getSelectedItem().toString());
             pst.setString(6, st_contact.getText());
             pst.setString(7, st_email.getText());
-            pst.setBytes(8, person_image);
-
+            pst.setString(8, destination);
             pst.execute();
-            JOptionPane.showMessageDialog(null, "Successfully Updated!");
-            
+            result = 1;
+            Files.copy(selectedFile.toPath(), new File(destination).toPath(), StandardCopyOption.REPLACE_EXISTING);        
         }catch(Exception e){
-            System.out.println(e);
+               System.out.println("Insert Image Error");
         }
-           
-           
+
+           if(result == 1){
+               JOptionPane.showMessageDialog(null, "Successfully Save!");
+               close();
+           }else{
+                System.out.println("Saving Data Failed!");
+           }
        }else if(action.equals("Update")){
            dbConnector dbc = new dbConnector();
-           dbc.updateData("UPDATE tbl_student SET s_fname = '"+st_fname.getText()+"', s_lname = '"+st_lname.getText()+"', "
-                                        + "s_gender = '"+gender+"', s_address = '"+st_address.getText()+"', s_status = '"+st_status.getSelectedItem()+"',"
-                                                + "s_contact =  '"+st_contact.getText()+"', s_email = '"+st_email.getText()+"'"
-                                                        + "WHERE s_id = '"+st_id.getText()+"'");
+           try{
+           String sql = "UPDATE tbl_student SET s_fname = ?, s_lname = ?, s_gender = ?, s_address = ?, s_status = ?, s_contact = ?, s_email = ?, s_image = ?  WHERE s_id = '"+st_id.getText()+"'";
+           PreparedStatement pst = dbc.connect.prepareStatement(sql);
+            pst.setString(1, st_fname.getText());
+            pst.setString(2, st_lname.getText());
+            pst.setString(3, gender);
+            pst.setString(4, st_address.getText());
+            pst.setString(5, st_status.getSelectedItem().toString());
+            pst.setString(6, st_contact.getText());
+            pst.setString(7, st_email.getText());
+            pst.setString(8, destination);
+            pst.execute();
            close();
+
+           imageUpdater(oldpath, path);
+           
+           File existingFile = new File(oldpath);
+            if (existingFile.exists()) {
+                existingFile.delete();
+            }
+           
+           JOptionPane.showMessageDialog(null, "Successfully Updated!");
+           }catch(SQLException e){
+               System.out.println("Database Connection Error!");
+           }
        }else{
            JOptionPane.showMessageDialog(null, "No action selected!");
            close();
        }
     }//GEN-LAST:event_addMouseClicked
 
-public  ImageIcon ResizeImage(String ImagePath, byte[] pic) {
-    ImageIcon MyImage = null;
-        if(ImagePath !=null){
-            MyImage = new ImageIcon(ImagePath);
-        }else{
-            MyImage = new ImageIcon(pic);
-        }
-    Image img = MyImage.getImage();
-    Image newImg = img.getScaledInstance(image_display.getWidth(), image_display.getHeight(), Image.SCALE_SMOOTH);
-    ImageIcon image = new ImageIcon(newImg);
-    return image;
-}
-
-    public byte[] imageBytes;
-    String path;
-    String filename=null;
-    String imgPath = null;
-    public byte[] person_image = null;
-    
-    private void select_imageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_select_imageMouseClicked
-        JFileChooser chooser = new JFileChooser();
-        chooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("*.Images", "jpg", "gif", "png");
-        chooser.addChoosableFileFilter(filter);
-        int result = chooser.showSaveDialog(null);
-        
-        if (result == JFileChooser.APPROVE_OPTION){
-            File selectedFile = chooser.getSelectedFile();
-            path = selectedFile.getAbsolutePath();
-            image_display.setIcon(ResizeImage(path,null));
-            imgPath = path;
-            File f = chooser.getSelectedFile();
-            filename = selectedFile.getAbsolutePath();
-        }else{
-        JOptionPane.showMessageDialog(null, "Canceled !");
-        }
-        
-      
-        try {
-                File image = new File(filename);
-                FileInputStream fis = new FileInputStream(image);
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                byte[] buf = new byte[1024];
+    private void jPanel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MouseClicked
+        JFileChooser fileChooser = new JFileChooser();
+                int returnValue = fileChooser.showOpenDialog(null);
                 
-                for (int readNum; (readNum=fis.read(buf)) !=-1;){
-                 bos.write(buf,0,readNum);
+                
+                
+                if (returnValue == JFileChooser.APPROVE_OPTION) {
+                    try {
+                        selectedFile = fileChooser.getSelectedFile();
+                        destination = "src/images/" + selectedFile.getName();
+                        path  = selectedFile.getAbsolutePath();
+                        
+                        
+                        if(FileExistenceChecker(path) == 1){
+                          JOptionPane.showMessageDialog(null, "File Already Exist, Rename or Choose another!");
+                            destination = "";
+                            path="";
+                        }else{
+                            image.setIcon(ResizeImage(path, null, image));
+                            System.out.println(""+destination);
+                            browse.setVisible(true);
+                            browse.setText("REMOVE");
+                        }
+                    } catch (Exception ex) {
+                        System.out.println("File Error!");
+                    }
                 }
-                person_image=bos.toByteArray();
-                
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }//GEN-LAST:event_select_imageMouseClicked
+    }//GEN-LAST:event_jPanel3MouseClicked
 
-    private void select_imageMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_select_imageMouseEntered
-        // TODO add your handling code here:
-    }//GEN-LAST:event_select_imageMouseEntered
-
-    private void select_imageMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_select_imageMouseExited
-        // TODO add your handling code here:
-    }//GEN-LAST:event_select_imageMouseExited
+    private void browseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_browseMouseClicked
+        browse.setVisible(false);
+        image.setIcon(null);
+        destination = "";
+        path="";
+    }//GEN-LAST:event_browseMouseClicked
     
     /**
      * @param args the command line arguments
@@ -466,10 +541,12 @@ public  ImageIcon ResizeImage(String ImagePath, byte[] pic) {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel add;
+    public javax.swing.JLabel browse;
     private java.awt.Canvas canvas1;
     private javax.swing.JLabel close;
     public javax.swing.JRadioButton female;
-    public javax.swing.JLabel image_display;
+    public javax.swing.JLabel image;
+    public javax.swing.JLabel image1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -485,14 +562,12 @@ public  ImageIcon ResizeImage(String ImagePath, byte[] pic) {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     public javax.swing.JRadioButton male;
-    private javax.swing.JPanel select_image;
     public javax.swing.JTextArea st_address;
     public javax.swing.JTextField st_contact;
     public javax.swing.JTextField st_email;
     public javax.swing.JTextField st_fname;
     public javax.swing.JTextField st_id;
     public javax.swing.JLabel st_label;
-    public javax.swing.JLabel st_label1;
     public javax.swing.JTextField st_lname;
     public javax.swing.JComboBox<String> st_status;
     // End of variables declaration//GEN-END:variables

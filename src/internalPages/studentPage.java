@@ -8,20 +8,17 @@ import config.dbConnector;
 import java.awt.Color;
 import static java.awt.Color.BLACK;
 import java.awt.Font;
-import java.awt.Image;
-import java.awt.Toolkit;
+import java.io.File;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
 import javax.swing.SwingUtilities;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -40,7 +37,8 @@ public class studentPage extends javax.swing.JInternalFrame {
      * Creates new form userPage
      */
     public studentPage() {
-        initComponents(); 
+        initComponents();
+        
         displayData();
         
         this.setBorder(javax.swing.BorderFactory.createEmptyBorder(0,0,0,0));
@@ -49,24 +47,15 @@ public class studentPage extends javax.swing.JInternalFrame {
         
         search.setOpaque(false);
         search.setBackground(new Color(0,0,0,0));
-        student_table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
-        TableColumnModel columnModel = student_table.getColumnModel();
-            columnModel.getColumn(0).setPreferredWidth(10);
     
     }
-    
-    
     
     public void displayData(){
         try{
             dbConnector dbc = new dbConnector();
-            ResultSet rs = dbc.getData("SELECT s_id, s_lname, s_fname, s_gender FROM tbl_student");
+            ResultSet rs = dbc.getData("SELECT s_id, s_fname, s_lname, s_contact, s_email FROM tbl_student");
             student_table.setModel(DbUtils.resultSetToTableModel(rs));
-            DefaultTableModel model = (DefaultTableModel) student_table.getModel();
-            String[] columnIdentifiers = {"ID", "Firstname", "Lastname", "Gender"};
-            model.setColumnIdentifiers(columnIdentifiers);
-            
              rs.close();
         }catch(SQLException ex){
             System.out.println("Errors: "+ex.getMessage());
@@ -105,7 +94,6 @@ public class studentPage extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jProgressBar1 = new javax.swing.JProgressBar();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
@@ -311,6 +299,7 @@ public class studentPage extends javax.swing.JInternalFrame {
        stf.setVisible(true);
        stf.action = "Add";
        stf.st_label.setText("SAVE");
+       stf.browse.setVisible(false);
     }//GEN-LAST:event_addMouseClicked
 
     private void addMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addMouseEntered
@@ -339,49 +328,55 @@ public class studentPage extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "Please Select an Item!");
         }else{
             TableModel model = student_table.getModel();
-            
             studentForm stf = new studentForm();
-            stf.st_id.setText(""+model.getValueAt(rowIndex, 0));
-            String sid = model.getValueAt(rowIndex, 0).toString();
+            
             try{
-            dbConnector dbc = new dbConnector();
-            ResultSet rs = dbc.getData("SELECT * FROM tbl_student WHERE s_id = '"+sid+"' ");
+                dbConnector dbc = new dbConnector();
+                ResultSet rs = dbc.getData("SELECT * FROM tbl_student WHERE s_id ="+model.getValueAt(rowIndex, 0));
+                
             if(rs.next()){
-            stf.st_fname.setText(rs.getString("s_fname"));
-            stf.st_lname.setText(rs.getString("s_lname"));
-            stf.gender = rs.getString("s_gender");
-            
-            String gend = rs.getString("s_gender");
-            
-            if(gend.equals("Male")){
-                stf.male.setSelected(true); 
-            }
-            
-            if(gend.equals("Female")){
-                stf.female.setSelected(true);
+                stf.st_id.setText(""+rs.getString("s_id"));
+                stf.st_fname.setText(""+rs.getString("s_fname"));
+                stf.st_lname.setText(""+rs.getString("s_lname"));
+                stf.gender = rs.getString("s_gender");
+                String gend = rs.getString("s_gender");
+                        if(gend.equals("Male")){
+                              stf.male.setSelected(true);
+                          }
+                          if(gend.equals("Female")){
+                              stf.female.setSelected(true);
+                          }
+                stf.st_status.setSelectedItem(rs.getString("s_status"));
+                stf.st_address.setText(rs.getString("s_address"));
+                stf.st_contact.setText(rs.getString("s_contact"));
+                stf.st_email.setText(rs.getString("s_email"));
+                stf.image.setIcon(stf.ResizeImage(rs.getString("s_image"), null, stf.image));
+                stf.oldpath = rs.getString("s_image");
+                
+                stf.setVisible(true);
+                stf.action = "Update";
+                stf.st_label.setText("UPDATE");
+                stf.browse.setText("REMOVE");
+                JFrame mainFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+                mainFrame.dispose();
+                
+                if(rs.getString("s_image").isEmpty()){
+                    stf.browse.setVisible(false);
+                }else{
+                    stf.browse.setVisible(true);
+                }
+
             }
 
-            stf.st_status.setSelectedItem(rs.getString("s_status"));
-            stf.st_address.setText(rs.getString("s_address"));
-            stf.st_contact.setText(rs.getString("s_contact"));
-            stf.st_email.setText(rs.getString("s_email"));
-            stf.imageBytes = rs.getBytes("s_image");
+           
+            }catch(SQLException e){
+                System.out.println("Database Error Connection!");
             
-            stf.person_image = rs.getBytes("s_image");
-            stf.image_display.setIcon(stf.ResizeImage(null, rs.getBytes("s_image")));
-               
-            stf.setVisible(true);
-            stf.action = "Update";
-            stf.st_label.setText("UPDATE");
-            JFrame mainFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-            mainFrame.dispose();
-            }else{
-                System.out.println("No Data Found");
             }
-            }catch(SQLException w){
-                System.out.println(""+w);
-            }
-        }
+            
+       }
+            
+         
     }//GEN-LAST:event_editMouseClicked
 
     private void editMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editMouseEntered
@@ -404,6 +399,25 @@ public class studentPage extends javax.swing.JInternalFrame {
             if(a == JOptionPane.YES_OPTION){
                 dbConnector dbc = new dbConnector();
                 int s_id = Integer.parseInt(id);
+                
+                
+                try{
+               ResultSet rs = dbc.getData("SELECT * FROM tbl_student WHERE s_id ="+id);
+                
+                    if(rs.next()){
+                       studentForm stf = new studentForm();
+                       String oldpath = rs.getString("s_image");
+                       File existingFile = new File(oldpath);
+                        if (existingFile.exists()) {
+                            existingFile.delete();
+                        }
+           
+
+                   }
+                }catch(SQLException e){
+                    System.out.println("Error !");
+                }
+                
                 dbc.deleteData(s_id, "tbl_student", "s_id");
                 displayData();
             }
@@ -411,7 +425,7 @@ public class studentPage extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_deleteMouseClicked
 
     private void searchKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchKeyPressed
-            searchTable();
+searchTable();
     }//GEN-LAST:event_searchKeyPressed
 
     private void search_buttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_search_buttonMouseClicked
@@ -432,7 +446,6 @@ public class studentPage extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel refresh;
     private javax.swing.JTextField search;
