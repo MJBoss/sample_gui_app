@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 23, 2023 at 05:31 PM
+-- Generation Time: May 23, 2023 at 05:34 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -91,7 +91,7 @@ INSERT INTO `tbl_student` (`s_id`, `s_fname`, `s_lname`, `s_gender`, `s_address`
 (8, 'Joe', 'Test', 'Male', 'Test Address', 'Married', '0985465', 'test', ''),
 (11, 'a', 'a', 'Male', 'as', 'Single', 'as', 'as', ''),
 (12, 'b', 'b', 'Male', 'b', 'Single', 'b', 'b', ''),
-(13, 'vv', 'vv', 'Male', 'vv', 'Single', 'vv', 'vv', ''),
+(13, 'vv', 'vv', 'Male', 'vv', 'Single', 'vv', 'vv', 'src/images/IMG_0737.jpg'),
 (14, 'sss', 'sss', 'Female', 'ggsss', 'Married', 'sss', 'ggsss', '');
 
 -- --------------------------------------------------------
