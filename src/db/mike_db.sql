@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 10, 2023 at 04:30 PM
+-- Generation Time: May 23, 2023 at 05:31 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -77,17 +77,22 @@ CREATE TABLE `tbl_student` (
   `s_address` varchar(100) NOT NULL,
   `s_status` varchar(20) NOT NULL,
   `s_contact` varchar(20) NOT NULL,
-  `s_email` varchar(60) NOT NULL
+  `s_email` varchar(60) NOT NULL,
+  `s_image` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_student`
 --
 
-INSERT INTO `tbl_student` (`s_id`, `s_fname`, `s_lname`, `s_gender`, `s_address`, `s_status`, `s_contact`, `s_email`) VALUES
-(1, 'John', 'Doe', 'Male', 'Test Address Location', 'Single', '09456454510', 'mike@test.com'),
-(7, 'Mike', 'Test', 'Male', 'Address', 'Single', '0945464', 'test@email.com'),
-(8, 'Joe', 'Test', 'Male', 'Test Address', 'Married', '0985465', 'test');
+INSERT INTO `tbl_student` (`s_id`, `s_fname`, `s_lname`, `s_gender`, `s_address`, `s_status`, `s_contact`, `s_email`, `s_image`) VALUES
+(1, 'John', 'Doe', 'Male', 'Test Address Location', 'Single', '09456454510', 'mike@test.com', ''),
+(7, 'Mike', 'Test', 'Male', 'Address', 'Single', '0945464', 'test@email.com', ''),
+(8, 'Joe', 'Test', 'Male', 'Test Address', 'Married', '0985465', 'test', ''),
+(11, 'a', 'a', 'Male', 'as', 'Single', 'as', 'as', ''),
+(12, 'b', 'b', 'Male', 'b', 'Single', 'b', 'b', ''),
+(13, 'vv', 'vv', 'Male', 'vv', 'Single', 'vv', 'vv', ''),
+(14, 'sss', 'sss', 'Female', 'ggsss', 'Married', 'sss', 'ggsss', '');
 
 -- --------------------------------------------------------
 
@@ -112,7 +117,8 @@ CREATE TABLE `tbl_user` (
 INSERT INTO `tbl_user` (`user_id`, `user_fname`, `user_lname`, `user_email`, `username`, `password`, `user_status`) VALUES
 (1, 'Update', 'Testing', 'test@update.com', 'admins', 'admins', 'Active'),
 (4, 'Fname', 'Lname', 'Email@test.com', 'username', 'password', 'Pending'),
-(5, 'Mike', 'Test', 'email@trest.test', 'Miek', 'Mike', 'Pending');
+(5, 'Mike', 'Test', 'email@trest.test', 'Miek', 'Mike', 'Pending'),
+(7, 't', 't', 't', 't', '47mKTaMaEn1L3m5DAz9muidMqw636xxw7EFAK/YnPdg=', 'Pending');
 
 --
 -- Indexes for dumped tables
@@ -164,13 +170,13 @@ ALTER TABLE `tbl_enrollee`
 -- AUTO_INCREMENT for table `tbl_student`
 --
 ALTER TABLE `tbl_student`
-  MODIFY `s_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `s_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `tbl_user`
 --
 ALTER TABLE `tbl_user`
-  MODIFY `user_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `user_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Constraints for dumped tables
