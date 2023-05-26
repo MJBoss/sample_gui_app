@@ -49,7 +49,7 @@ public class studentForm extends javax.swing.JFrame {
     public String destination = "";
     File selectedFile;
     public String oldpath;
-    String path;
+    public String path;
     
     public void imageUpdater(String existingFilePath, String newFilePath){
         File existingFile = new File(existingFilePath);
@@ -448,15 +448,22 @@ public int FileExistenceChecker(String path){
             pst.setString(6, st_contact.getText());
             pst.setString(7, st_email.getText());
             pst.setString(8, destination);
+            
+          
+           
+            if (destination.isEmpty()) {
+                System.out.println("Destination is Empty!");
+                File existingFile = new File(oldpath);
+                if(existingFile.exists()){
+                    existingFile.delete();
+                }
+            }else{
+                imageUpdater(oldpath, path);
+                System.out.println("Destination is not Empty!");
+            }
+           
             pst.execute();
            close();
-
-           imageUpdater(oldpath, path);
-           
-           File existingFile = new File(oldpath);
-            if (existingFile.exists()) {
-                existingFile.delete();
-            }
            
            JOptionPane.showMessageDialog(null, "Successfully Updated!");
            }catch(SQLException e){
