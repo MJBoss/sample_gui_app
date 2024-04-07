@@ -22,7 +22,7 @@ public class dbConnector {
             try{
                 connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/mike_db", "root", "");
             }catch(SQLException ex){
-                    System.out.println("Can't connect to database: "+ex.getMessage());
+                    JOptionPane.showMessageDialog(null, "Server Connection Failed!");
             }
         }
         
@@ -30,7 +30,7 @@ public class dbConnector {
               try{
                 connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/mike_db", "root", "");
             }catch(SQLException ex){
-                    System.out.println("Can't connect to database: "+ex.getMessage());
+                    JOptionPane.showMessageDialog(null, "Server Connection Failed!");
             }
               return connect;
         }

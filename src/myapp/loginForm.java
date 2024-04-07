@@ -2,7 +2,10 @@ package myapp;
 
 
 import config.PasswordHasher;
+import config.Session;
+import config.Singleton;
 import config.dbConnector;
+import config.loggedUser;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.security.NoSuchAlgorithmException;
@@ -49,6 +52,8 @@ public class loginForm extends javax.swing.JFrame {
         panel.setBackground(defbutton);
         panel.setBorder(empty);
     }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -240,10 +245,27 @@ public class loginForm extends javax.swing.JFrame {
                         hashedpass = rs.getString("password");
                          rehashedPassword = PasswordHasher.hashPassword(pass);
                         if(user.equals(rs.getString("user_email")) && hashedpass.equals(rehashedPassword)){
-                            JOptionPane.showMessageDialog(null, "Success!");
+                            JOptionPane.showMessageDialog(null, "Login Success!");
                             dashBoard dash = new dashBoard();
                             this.dispose();
                             dash.setVisible(true);
+                            
+                            Singleton singletonInstance = Singleton.getInstance();
+                            int id = rs.getInt("user_id");
+                            String fname = rs.getString("user_fname");
+                            String lname = rs.getString("user_lname");
+                            String email = rs.getString("user_email");
+                            String users = rs.getString("username");
+                            String status = rs.getString("user_status");
+                            
+                            System.out.println("newData: "+id);
+                            singletonInstance.setId(id);
+                            singletonInstance.setFname(fname);
+                            singletonInstance.setLname(lname);
+                            singletonInstance.setEmail(email);
+                            singletonInstance.setUsername(users);
+                            singletonInstance.setStatus(status);
+                            
                         }else{
                             JOptionPane.showMessageDialog(null, "Invalid Account!");
                             password.setText("");
@@ -252,7 +274,7 @@ public class loginForm extends javax.swing.JFrame {
                         System.out.println("No data Found");
                     }
             } catch (NoSuchAlgorithmException | SQLException ex) {
-                System.out.println(""+ ex);
+                JOptionPane.showMessageDialog(null, "Server Connection Failed!");
             }
             }
     }//GEN-LAST:event_loginMouseClicked

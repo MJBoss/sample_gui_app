@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 23, 2023 at 05:34 PM
+-- Generation Time: Apr 08, 2024 at 12:42 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -51,17 +51,19 @@ CREATE TABLE `tbl_enrollee` (
   `en_id` int(10) NOT NULL,
   `s_id` int(10) NOT NULL,
   `dept_id` int(10) NOT NULL,
-  `en_status` varchar(10) NOT NULL
+  `date` varchar(50) NOT NULL,
+  `en_status` varchar(10) NOT NULL,
+  `user_id` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_enrollee`
 --
 
-INSERT INTO `tbl_enrollee` (`en_id`, `s_id`, `dept_id`, `en_status`) VALUES
-(1, 1, 1, 'Paid'),
-(2, 7, 2, 'Paid'),
-(3, 8, 1, 'Unpaid');
+INSERT INTO `tbl_enrollee` (`en_id`, `s_id`, `dept_id`, `date`, `en_status`, `user_id`) VALUES
+(1, 1, 1, '0', 'Paid', 0),
+(2, 7, 2, '0', 'Paid', 0),
+(3, 8, 1, '0', 'Unpaid', 0);
 
 -- --------------------------------------------------------
 
@@ -88,11 +90,12 @@ CREATE TABLE `tbl_student` (
 INSERT INTO `tbl_student` (`s_id`, `s_fname`, `s_lname`, `s_gender`, `s_address`, `s_status`, `s_contact`, `s_email`, `s_image`) VALUES
 (1, 'John', 'Doe', 'Male', 'Test Address Location', 'Single', '09456454510', 'mike@test.com', ''),
 (7, 'Mike', 'Test', 'Male', 'Address', 'Single', '0945464', 'test@email.com', ''),
-(8, 'Joe', 'Test', 'Male', 'Test Address', 'Married', '0985465', 'test', ''),
+(8, 'Joeas', 'Test', 'Male', 'Test Address', 'Married', '0985465', 'test', 'src/images/ba.png'),
 (11, 'a', 'a', 'Male', 'as', 'Single', 'as', 'as', ''),
 (12, 'b', 'b', 'Male', 'b', 'Single', 'b', 'b', ''),
-(13, 'vv', 'vv', 'Male', 'vv', 'Single', 'vv', 'vv', 'src/images/IMG_0737.jpg'),
-(14, 'sss', 'sss', 'Female', 'ggsss', 'Married', 'sss', 'ggsss', '');
+(13, 'vv', 'vv', 'Male', 'vv', 'Single', 'vv', 'vv', ''),
+(14, 'aaaaasss', 'aaaaass', 'Female', 'ggsss', 'Married', 'aaaa', 'ggsss', 'src/images/ba.png'),
+(18, 'Mikel', 'mike', 'Male', 'sadasd', 'Married', '324324', 'dsfdsfds', 'src/images/scc.png');
 
 -- --------------------------------------------------------
 
@@ -115,10 +118,7 @@ CREATE TABLE `tbl_user` (
 --
 
 INSERT INTO `tbl_user` (`user_id`, `user_fname`, `user_lname`, `user_email`, `username`, `password`, `user_status`) VALUES
-(1, 'Update', 'Testing', 'test@update.com', 'admins', 'admins', 'Active'),
-(4, 'Fname', 'Lname', 'Email@test.com', 'username', 'password', 'Pending'),
-(5, 'Mike', 'Test', 'email@trest.test', 'Miek', 'Mike', 'Pending'),
-(7, 't', 't', 't', 't', '47mKTaMaEn1L3m5DAz9muidMqw636xxw7EFAK/YnPdg=', 'Pending');
+(100010, 'Michael John', 'Bustamante', 'mike@stcecilia.edu.ph', 'Michael', 'n4bQgYhMfWWaL+qgxVrQFaO/TxsrC4Is0V1sFbDwCgg=', 'Active');
 
 --
 -- Indexes for dumped tables
@@ -170,13 +170,13 @@ ALTER TABLE `tbl_enrollee`
 -- AUTO_INCREMENT for table `tbl_student`
 --
 ALTER TABLE `tbl_student`
-  MODIFY `s_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `s_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `tbl_user`
 --
 ALTER TABLE `tbl_user`
-  MODIFY `user_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `user_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100012;
 
 --
 -- Constraints for dumped tables

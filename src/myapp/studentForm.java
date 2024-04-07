@@ -63,7 +63,7 @@ public class studentForm extends javax.swing.JFrame {
                 Files.copy(newFile.toPath(), updatedFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 System.out.println("Image updated successfully.");
             } catch (IOException e) {
-                System.out.println("Error occurred while updating the image: ");
+                System.out.println("Error occurred while updating the image: "+e);
             }
         } else {
             try{
@@ -334,6 +334,11 @@ public int FileExistenceChecker(String path){
         image.setBackground(new java.awt.Color(153, 153, 255));
         image.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         image.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        image.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                imageMouseClicked(evt);
+            }
+        });
         jPanel3.add(image);
         image.setBounds(10, 10, 190, 160);
 
@@ -452,14 +457,14 @@ public int FileExistenceChecker(String path){
           
            
             if (destination.isEmpty()) {
-                System.out.println("Destination is Empty!");
                 File existingFile = new File(oldpath);
                 if(existingFile.exists()){
                     existingFile.delete();
                 }
             }else{
-                imageUpdater(oldpath, path);
-                System.out.println("Destination is not Empty!");
+                    if(!(oldpath.equals(path))){
+                        imageUpdater(oldpath, path);
+                    }
             }
            
             pst.execute();
@@ -478,9 +483,6 @@ public int FileExistenceChecker(String path){
     private void jPanel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MouseClicked
         JFileChooser fileChooser = new JFileChooser();
                 int returnValue = fileChooser.showOpenDialog(null);
-                
-                
-                
                 if (returnValue == JFileChooser.APPROVE_OPTION) {
                     try {
                         selectedFile = fileChooser.getSelectedFile();
@@ -494,7 +496,6 @@ public int FileExistenceChecker(String path){
                             path="";
                         }else{
                             image.setIcon(ResizeImage(path, null, image));
-                            System.out.println(""+destination);
                             browse.setVisible(true);
                             browse.setText("REMOVE");
                         }
@@ -510,6 +511,10 @@ public int FileExistenceChecker(String path){
         destination = "";
         path="";
     }//GEN-LAST:event_browseMouseClicked
+
+    private void imageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_imageMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_imageMouseClicked
     
     /**
      * @param args the command line arguments

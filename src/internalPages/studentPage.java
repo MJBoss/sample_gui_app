@@ -354,7 +354,6 @@ public class studentPage extends javax.swing.JInternalFrame {
                 stf.oldpath = rs.getString("s_image");
                 stf.path = rs.getString("s_image");
                 stf.destination = rs.getString("s_image");
-                System.out.println(""+stf.destination);
                 
                 stf.setVisible(true);
                 stf.action = "Update";

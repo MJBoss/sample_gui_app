@@ -6,11 +6,16 @@
 package internalPages;
 
 
+import config.Singleton;
+import config.dbConnector;
+import config.loggedUser;
 import java.awt.Color;
+import java.sql.ResultSet;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 import myapp.*;
+import java.sql.SQLException;
 
 
 /**
@@ -28,8 +33,32 @@ public class settingsPage extends javax.swing.JInternalFrame {
         this.setBorder(javax.swing.BorderFactory.createEmptyBorder(0,0,0,0));
         BasicInternalFrameUI bi = (BasicInternalFrameUI)this.getUI();
         bi.setNorthPane(null);
+        getUser();
+        
         
     }
+    
+
+    
+    public void getUser(){
+        
+        int id = loggedUser.getAdminUser();
+        
+        try{
+        dbConnector dbc = new dbConnector();
+        ResultSet rs = dbc.getData("SELECT * FROM tbl_user WHERE user_id = '"+id+"'");
+        if(rs.next()){
+            fullname.setText(rs.getString("user_lname")+", "+rs.getString("user_fname"));
+//            studentForm stf = new studentForm();
+//            profile.setIcon(stf.ResizeImage(rs.getString("s_image"), null, profile));
+        }
+        }catch(SQLException e){
+            System.out.println("DB Error!");
+        }
+        
+    }
+    
+    
     
         Color navcolor = new Color(140,104,141);
         Color headcolor = new Color(153,153,255);
@@ -46,13 +75,17 @@ public class settingsPage extends javax.swing.JInternalFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
+        fullname = new javax.swing.JLabel();
+        profile = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
+        ustatus = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        uid = new javax.swing.JLabel();
+        uuname = new javax.swing.JLabel();
+        uemail = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         manageUser = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
@@ -64,6 +97,23 @@ public class settingsPage extends javax.swing.JInternalFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
 
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameActivated(evt);
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 255));
@@ -72,17 +122,17 @@ public class settingsPage extends javax.swing.JInternalFrame {
         jPanel3.setBackground(new java.awt.Color(140, 104, 141));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel12.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel12.setText("USER NAME HERE");
-        jPanel3.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 170, 180, -1));
+        fullname.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        fullname.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        fullname.setText("USER NAME HERE");
+        jPanel3.add(fullname, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 170, 220, -1));
 
-        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconsFolder/user-100.png"))); // NOI18N
-        jPanel3.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 160, 110));
+        profile.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        profile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconsFolder/user-100.png"))); // NOI18N
+        jPanel3.add(profile, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, 160, 150));
 
         jPanel1.add(jPanel3);
-        jPanel3.setBounds(500, 0, 180, 210);
+        jPanel3.setBounds(480, 0, 220, 210);
 
         jLabel1.setFont(new java.awt.Font("Century Gothic", 1, 24)); // NOI18N
         jLabel1.setText("ACCOUNT SETTINGS");
@@ -90,24 +140,40 @@ public class settingsPage extends javax.swing.JInternalFrame {
         jLabel1.setBounds(20, 10, 300, 40);
 
         jLabel2.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        jLabel2.setText("ADDRESS: USER ADDRESS LOCATION");
+        jLabel2.setText("USER STATUS:");
         jPanel1.add(jLabel2);
-        jLabel2.setBounds(20, 150, 270, 20);
+        jLabel2.setBounds(20, 150, 110, 20);
 
-        jLabel9.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        jLabel9.setText("ACCOUNT NAME: USER NAME HERE");
-        jPanel1.add(jLabel9);
-        jLabel9.setBounds(20, 70, 270, 20);
+        ustatus.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        jPanel1.add(ustatus);
+        ustatus.setBounds(150, 150, 200, 20);
 
         jLabel10.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        jLabel10.setText("POSITION: ADMINISTRATOR");
+        jLabel10.setText("USERNAME:");
         jPanel1.add(jLabel10);
-        jLabel10.setBounds(20, 90, 270, 20);
+        jLabel10.setBounds(20, 90, 110, 20);
 
         jLabel11.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        jLabel11.setText("EMAIL: USER@USER.EMAIL");
+        jLabel11.setText("EMAIL:");
         jPanel1.add(jLabel11);
-        jLabel11.setBounds(20, 110, 270, 20);
+        jLabel11.setBounds(20, 110, 110, 20);
+
+        jLabel12.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        jLabel12.setText("ACCOUNT ID:");
+        jPanel1.add(jLabel12);
+        jLabel12.setBounds(20, 70, 110, 20);
+
+        uid.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        jPanel1.add(uid);
+        uid.setBounds(150, 70, 200, 20);
+
+        uuname.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        jPanel1.add(uuname);
+        uuname.setBounds(150, 90, 200, 20);
+
+        uemail.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        jPanel1.add(uemail);
+        uemail.setBounds(150, 110, 200, 20);
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 760, 210));
 
@@ -226,12 +292,25 @@ public class settingsPage extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_logoutMouseClicked
 
 
+    
+    private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
+                Singleton singletonInstance = Singleton.getInstance();
+                
+                
+                fullname.setText(""+singletonInstance.getFname()+" "+singletonInstance.getLname());
+                uid.setText(""+singletonInstance.getId());
+                uuname.setText(""+singletonInstance.getUsername());
+                uemail.setText(""+singletonInstance.getEmail());
+                ustatus.setText(""+singletonInstance.getStatus());
+    }//GEN-LAST:event_formInternalFrameActivated
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel fullname;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -239,12 +318,16 @@ public class settingsPage extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel logout;
     private javax.swing.JPanel manageUser;
+    private javax.swing.JLabel profile;
     private javax.swing.JPanel reports;
+    private javax.swing.JLabel uemail;
+    private javax.swing.JLabel uid;
+    private javax.swing.JLabel ustatus;
+    private javax.swing.JLabel uuname;
     // End of variables declaration//GEN-END:variables
 }

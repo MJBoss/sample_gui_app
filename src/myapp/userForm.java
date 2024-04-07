@@ -89,7 +89,7 @@ public class userForm extends javax.swing.JFrame {
         jPanel2.setLayout(null);
 
         jLabel1.setFont(new java.awt.Font("Century Gothic", 1, 24)); // NOI18N
-        jLabel1.setText("STUDENT FORM");
+        jLabel1.setText("ENROLL FORM");
         jPanel2.add(jLabel1);
         jLabel1.setBounds(20, 10, 300, 40);
 
@@ -102,9 +102,9 @@ public class userForm extends javax.swing.JFrame {
             }
         });
         jPanel2.add(close);
-        close.setBounds(330, 10, 40, 40);
+        close.setBounds(670, 10, 40, 40);
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 380, 60));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 720, 60));
 
         add.setBackground(new java.awt.Color(140, 104, 141));
         add.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -193,7 +193,7 @@ public class userForm extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

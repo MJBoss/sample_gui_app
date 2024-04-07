@@ -6,9 +6,13 @@ package myapp;
  * and open the template in the editor.
  */
 
+import config.Session;
+import config.Singleton;
+import config.loggedUser;
 import java.awt.Color;
 import internalPages.*;
 import internalPages.dashBoardPage;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -16,16 +20,33 @@ import internalPages.dashBoardPage;
  */
 public class dashBoard extends javax.swing.JFrame {
 
+    
     /**
      * Creates new form dashBoard
      */
     public dashBoard() {
+       
         initComponents();
         
         dashBoardPage dbp = new dashBoardPage();
         maindesktop.add(dbp).setVisible(true);
         
     }
+    
+  private void getData(){
+  Singleton singletonInstance = Singleton.getInstance();
+
+    if(singletonInstance.getId() == 0){
+        JOptionPane.showMessageDialog(null, "Login First!");
+        loginForm lf = new loginForm();
+        lf.setVisible(true);
+        this.dispose();
+    }else{
+           int retrievedData = singletonInstance.getId();
+            user_ID.setText(""+retrievedData);
+    }
+ 
+  }
     
     Color navcolor = new Color(140,104,141);
     Color headcolor = new Color(102,102,255);
@@ -57,10 +78,16 @@ public class dashBoard extends javax.swing.JFrame {
         header = new javax.swing.JPanel();
         minimize = new javax.swing.JLabel();
         close = new javax.swing.JLabel();
+        user_ID = new javax.swing.JLabel();
         maindesktop = new javax.swing.JDesktopPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 255));
         jPanel1.setLayout(null);
@@ -225,6 +252,18 @@ public class dashBoard extends javax.swing.JFrame {
         });
         header.add(close, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 0, 40, 40));
 
+        user_ID.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                user_IDMouseClicked(evt);
+            }
+        });
+        user_ID.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                user_IDComponentShown(evt);
+            }
+        });
+        header.add(user_ID, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 50, 20));
+
         jPanel1.add(header);
         header.setBounds(170, 0, 760, 40);
 
@@ -257,7 +296,7 @@ public class dashBoard extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 472, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
         );
 
         pack();
@@ -317,6 +356,8 @@ public class dashBoard extends javax.swing.JFrame {
     private void accountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_accountMouseClicked
         settingsPage set = new settingsPage();
        maindesktop.add(set).setVisible(true);
+        System.out.println(""+loggedUser.getAdminUser());
+  
     }//GEN-LAST:event_accountMouseClicked
 
     private void minimizeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_minimizeMouseClicked
@@ -358,6 +399,18 @@ public class dashBoard extends javax.swing.JFrame {
         enrollees.setBackground(navcolor);
     }//GEN-LAST:event_enrolleesMouseExited
 
+    private void user_IDMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_user_IDMouseClicked
+
+    }//GEN-LAST:event_user_IDMouseClicked
+
+    private void user_IDComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_user_IDComponentShown
+        // TODO add your handling code here:
+    }//GEN-LAST:event_user_IDComponentShown
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+             getData();
+    }//GEN-LAST:event_formWindowActivated
+
     /**
      * @param args the command line arguments
      */
@@ -389,7 +442,9 @@ public class dashBoard extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new dashBoard().setVisible(true);
+                
             }
+            
         });
     }
 
@@ -411,6 +466,7 @@ public class dashBoard extends javax.swing.JFrame {
     private javax.swing.JLabel minimize;
     private javax.swing.JPanel navbar;
     private javax.swing.JPanel students;
+    private javax.swing.JLabel user_ID;
     private javax.swing.JPanel users;
     // End of variables declaration//GEN-END:variables
 }
