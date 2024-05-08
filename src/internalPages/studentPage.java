@@ -137,6 +137,11 @@ public class studentPage extends javax.swing.JInternalFrame {
         student_table.setRowHeight(20);
         student_table.setSelectionBackground(new java.awt.Color(153, 153, 255));
         student_table.getTableHeader().setReorderingAllowed(false);
+        student_table.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                student_tableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(student_table);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 740, 300));
@@ -364,8 +369,10 @@ public class studentPage extends javax.swing.JInternalFrame {
                 
                 if(rs.getString("s_image").isEmpty()){
                     stf.browse.setVisible(false);
+                    stf.browse1.setVisible(true);
                 }else{
                     stf.browse.setVisible(true);
+                    stf.browse1.setVisible(false);
                 }
 
             }
@@ -433,6 +440,10 @@ searchTable();
     private void search_buttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_search_buttonMouseClicked
        searchTable();
     }//GEN-LAST:event_search_buttonMouseClicked
+
+    private void student_tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_student_tableMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_student_tableMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -43,7 +43,9 @@ public class studentForm extends javax.swing.JFrame {
      */
     public studentForm() {
         initComponents();
-        browse.setVisible(false);
+        
+       
+        
     }
     
     public String destination = "";
@@ -181,6 +183,7 @@ public int FileExistenceChecker(String path){
         image1 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         browse = new javax.swing.JLabel();
+        browse1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -329,7 +332,6 @@ public int FileExistenceChecker(String path){
                 jPanel3MouseClicked(evt);
             }
         });
-        jPanel3.setLayout(null);
 
         image.setBackground(new java.awt.Color(153, 153, 255));
         image.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
@@ -339,15 +341,35 @@ public int FileExistenceChecker(String path){
                 imageMouseClicked(evt);
             }
         });
-        jPanel3.add(image);
-        image.setBounds(10, 10, 190, 160);
 
         image1.setBackground(new java.awt.Color(153, 153, 255));
         image1.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         image1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         image1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconsFolder/add.png"))); // NOI18N
-        jPanel3.add(image1);
-        image1.setBounds(10, 10, 190, 160);
+        image1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                image1MouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(image, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(image1, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(image, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(image1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
 
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 190, 210, 180));
 
@@ -365,6 +387,17 @@ public int FileExistenceChecker(String path){
             }
         });
         jPanel1.add(browse, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 380, 210, 20));
+
+        browse1.setBackground(new java.awt.Color(153, 153, 255));
+        browse1.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        browse1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        browse1.setText("SELECT");
+        browse1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                browse1MouseClicked(evt);
+            }
+        });
+        jPanel1.add(browse1, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 380, 210, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -507,6 +540,7 @@ public int FileExistenceChecker(String path){
 
     private void browseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_browseMouseClicked
         browse.setVisible(false);
+        browse1.setVisible(true);
         image.setIcon(null);
         destination = "";
         path="";
@@ -515,6 +549,57 @@ public int FileExistenceChecker(String path){
     private void imageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_imageMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_imageMouseClicked
+
+    private void image1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_image1MouseClicked
+        JFileChooser fileChooser = new JFileChooser();
+                int returnValue = fileChooser.showOpenDialog(null);
+                if (returnValue == JFileChooser.APPROVE_OPTION) {
+                    try {
+                        selectedFile = fileChooser.getSelectedFile();
+                        destination = "src/images/" + selectedFile.getName();
+                        path  = selectedFile.getAbsolutePath();
+                        
+                        
+                        if(FileExistenceChecker(path) == 1){
+                          JOptionPane.showMessageDialog(null, "File Already Exist, Rename or Choose another!");
+                            destination = "";
+                            path="";
+                        }else{
+                            image.setIcon(ResizeImage(path, null, image));
+                            browse.setVisible(true);
+                            browse.setText("REMOVE");
+                        }
+                    } catch (Exception ex) {
+                        System.out.println("File Error!");
+                    }
+                }
+    }//GEN-LAST:event_image1MouseClicked
+
+    private void browse1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_browse1MouseClicked
+        JFileChooser fileChooser = new JFileChooser();
+                int returnValue = fileChooser.showOpenDialog(null);
+                if (returnValue == JFileChooser.APPROVE_OPTION) {
+                    try {
+                        selectedFile = fileChooser.getSelectedFile();
+                        destination = "src/images/" + selectedFile.getName();
+                        path  = selectedFile.getAbsolutePath();
+                        
+                        
+                        if(FileExistenceChecker(path) == 1){
+                          JOptionPane.showMessageDialog(null, "File Already Exist, Rename or Choose another!");
+                            destination = "";
+                            path="";
+                        }else{
+                            image.setIcon(ResizeImage(path, null, image));
+                            browse.setVisible(true);
+                            browse.setText("REMOVE");
+                            browse1.setVisible(false);
+                        }
+                    } catch (Exception ex) {
+                        System.out.println("File Error!");
+                    }
+                }
+    }//GEN-LAST:event_browse1MouseClicked
     
     /**
      * @param args the command line arguments
@@ -554,11 +639,12 @@ public int FileExistenceChecker(String path){
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel add;
     public javax.swing.JLabel browse;
+    public javax.swing.JLabel browse1;
     private java.awt.Canvas canvas1;
     private javax.swing.JLabel close;
     public javax.swing.JRadioButton female;
     public javax.swing.JLabel image;
-    public javax.swing.JLabel image1;
+    private javax.swing.JLabel image1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

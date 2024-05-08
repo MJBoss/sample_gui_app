@@ -1,36 +1,79 @@
 // Session.java
 package config;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class Session {
-    private static Map<String, Object> sessionData = new HashMap<>();
-    private static int loggedInUserId = -1; // Default value indicating no user logged in
+    
+    private static Session instance;
+    private int id;
+    private String fname;
+    private String lname;
+    private String email;
+    private String username;
+    private String status;
+    
+        private Session() {
+        // Private constructor to prevent instantiation
+    }
 
-    public static boolean login(int id) {
-        if (id != 0) {
-            sessionData.put("loggedIn", true);
-            loggedInUserId = id; // Set the logged-in user ID
-            return true;
-        } else {
-            return false;
+
+
+   public static synchronized Session getInstance() {
+        if (instance == null) {
+            instance = new Session();
         }
+        return instance;
+    }
+   
+   public static boolean isInstanceEmpty() {
+        return instance == null;
     }
 
-    // Method to check if the user is logged in
-    public static boolean isLoggedIn() {
-        return sessionData.containsKey("loggedIn") && (boolean) sessionData.get("loggedIn");
+    public int getId() {
+        return id;
     }
 
-    // Method to get the ID of the logged-in user
-    public static int getLoggedInUserId() {
-        return loggedInUserId; // Return the logged-in user ID
+    public void setId(int id) {
+        this.id = id;
     }
 
-    // Method to logout user
-    public static void logout() {
-        sessionData.clear();
-        loggedInUserId = -1; // Reset the logged-in user ID
+    public String getFname() {
+        return fname;
     }
+
+    public void setFname(String fname) {
+        this.fname = fname;
+    }
+
+    public String getLname() {
+        return lname;
+    }
+
+    public void setLname(String lname) {
+        this.lname = lname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+   
 }
